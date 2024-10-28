@@ -43,13 +43,13 @@
                      -DIS_REMOTE_RUN=true
                      -Denvironment=UAT
                      -DAPI_USERNAME=user4
-                     -DAPI_PASSWORD=hlB5U1rA
+                     -DAPI_PASSWORD=xxxx
             Program argument:
                      --plugin
                      pretty
 
 3. Uruchomienie testów z runer TestNG (raportowanie do ReportPortall)
    przechodzimy do folderu projektowego uruchamiamy komendę:
-    mvn clean test -D"Surefire.suiteXmlFiles=src/test/java/TestNg.xml" -DIS_REMOTE_RUN=true -Denvironment=UAT -DAPI_USERNAME=user4 -DAPI_PASSWORD=hlB5U1rA
+    mvn clean test -D"Surefire.suiteXmlFiles=src/test/java/TestNg.xml" -DIS_REMOTE_RUN=true -Denvironment=UAT -DAPI_USERNAME=user4 -DAPI_PASSWORD=xxxx
 
 	
