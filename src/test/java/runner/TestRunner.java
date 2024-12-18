@@ -21,8 +21,8 @@ import java.util.List;
                 "html:target/cucumber/report.html",
                 "json:target/cucumber/report.json",
                 "pretty",
-                "com.epam.reportportal.cucumber.ScenarioReporter"
-            //    "com.epam.reportportal.cucumber.StepReporter"
+//                "com.epam.reportportal.cucumber.ScenarioReporter"
+//                "com.epam.reportportal.cucumber.StepReporter"
 }
 
 )
