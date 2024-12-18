@@ -24,6 +24,7 @@ public class ConfigReader {
         InputStream inputStream = new FileInputStream(configPath);
         p.load(inputStream);
         Settings.GRID_URL = p.getProperty("GRID_URL");
+        log.info("Settings.GRID_URL="+Settings.GRID_URL);
         Settings.CHROME_VERSION = p.getProperty("CHROME_VERSION");
         Settings.TESTED_APP_URL = p.getProperty("TESTED_APP_URL");
         Settings.RP_ENDPOINT = p.getProperty("RP_ENDPOINT");
