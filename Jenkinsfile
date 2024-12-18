@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // Sprawdź czy Jenkins ma skonfigurowane poświadczenia do repo
                 // Jeśli repo jest publiczne, wystarczy samo url
-                git url: 'https://github.com/bisekw/t_mobile_req.git', branch: 'main'
+                git url: 'https://github.com/bisekw/t_mobile_req.git', branch: 'master'
             }
         }
 
