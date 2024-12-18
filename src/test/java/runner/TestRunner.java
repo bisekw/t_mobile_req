@@ -15,7 +15,7 @@ import java.util.List;
 @CucumberOptions(features = {"src/test/java/features"},
         glue = {"steps",
                 "classpath:framework.steps"},
-     //   tags = "@IOS",
+        tags = "@API",
         monochrome = true,
         plugin = {"framework.core.StepsDetails",
                 "html:target/cucumber/report.html",
