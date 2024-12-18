@@ -6,6 +6,7 @@ pipeline {
     stages {
     stage('Cleanup Workspace') {
                 steps {
+                    // Usuwa wszystkie pliki i katalogi w workspace
                     deleteDir()
                 }
             }
@@ -13,6 +14,7 @@ pipeline {
                 steps {
                     sh '''
                       git clone https://github.com/bisekw/t_mobile_master.git
+                      cd t_mobile_master
                       mvn clean install -DskipTests
                     '''
                 }
