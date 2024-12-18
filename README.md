@@ -51,9 +51,18 @@
     mvn clean test -D"Surefire.suiteXmlFiles=src/test/java/TestNg.xml" -DIS_REMOTE_RUN=true -Denvironment=UAT
 
 4. Jenkins dostępny pod adresem http://localhost:8082
-   Zaloguj się do Jenkins
+
    Otwórz w przeglądarce adres Jenkinsa, np. http://localhost:8082 (lub inny, jeśli zmieniłeś port).
    Zainstaluj wtyczkę "Pipeline" (jeśli nie jest domyślnie zainstalowana)
    Przejdź do Manage Jenkins > Manage Plugins > Available.
   Wyszukaj "Pipeline".
   Wyszukaj "Git" i zainstaluj
+
+Skonfiguruj Pipeline job
+W konfiguracji joba:
+
+    W sekcji Pipeline wybierz: Pipeline script from SCM (jeżeli chcesz, aby Jenkins pobierał Jenkinsfile z repozytorium).
+    W polu SCM wybierz Git.
+    Podaj URL do Twojego repozytorium: np. https://github.com/bisekw/t_mobile_req.git
+    W polu Script Path pozostaw Jenkinsfile (o ile taki jest w root repo).
+    Save

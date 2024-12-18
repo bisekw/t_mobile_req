@@ -2,6 +2,7 @@ Feature: Wybranie telefonu z listy ofert
   Background:
     When Użytkownik uruchamia przeglądarkę CHROME
 
+    @GUI
   Scenario: Wybranie telefonu z listy ofert
     * Przechodzę do strony T-mobile
     * Weryfikuję czy strona wczytała się poprawnie
