@@ -8,7 +8,6 @@ pipeline {
                 steps {
                     sh '''
                       git clone https://github.com/bisekw/t_mobile_master.git
-                      cd CrossTestMaster
                       mvn clean install -DskipTests
                     '''
                 }
