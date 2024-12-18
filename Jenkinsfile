@@ -1,16 +1,11 @@
 pipeline {
-   agent {
-           docker {
-               image 'maven:3.8.5-openjdk-11'
-               args '-u root:root'
-           }
-       }
-
+    agent any
+    tools {
+        maven 'Maven'
+    }
     stages {
         stage('Checkout') {
             steps {
-                // Sprawdź czy Jenkins ma skonfigurowane poświadczenia do repo
-                // Jeśli repo jest publiczne, wystarczy samo url
                 git url: 'https://github.com/bisekw/t_mobile_req.git', branch: 'master'
             }
         }
