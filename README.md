@@ -1,5 +1,6 @@
 # cross_master
 1. Należy pobrać i zbudować paczkę via maven:
+   https://github.com/bisekw/t_mobile_master
 		mvn clean install -DskipTests
 2. Weryfikacja odłożenia paczki:
 	paczka powinna odłożyć się w katalogu .m2
@@ -57,7 +58,9 @@
    Przejdź do Manage Jenkins > Manage Plugins > Available.
   Wyszukaj "Pipeline".
   Wyszukaj "Git" i zainstaluj
-
+    
+    Przejdż do http://localhost:8082/manage/configureTools/
+    dodaj konfigurację maven /wybierz instalację np. Apachee
 Skonfiguruj Pipeline job
 W konfiguracji joba:
 

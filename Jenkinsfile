@@ -4,6 +4,15 @@ pipeline {
         maven 'Maven'
     }
     stages {
+    stage('Checkout CrossTestMaster') {
+                steps {
+                    sh '''
+                      git clone https://github.com/bisekw/t_mobile_master.git
+                      cd CrossTestMaster
+                      mvn clean install -DskipTests
+                    '''
+                }
+            }
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/bisekw/t_mobile_req.git', branch: 'master'
