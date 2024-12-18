@@ -4,6 +4,11 @@ pipeline {
         maven 'Maven'
     }
     stages {
+    stage('Cleanup Workspace') {
+                steps {
+                    deleteDir()
+                }
+            }
     stage('Checkout CrossTestMaster') {
                 steps {
                     sh '''
