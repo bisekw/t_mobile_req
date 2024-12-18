@@ -23,6 +23,7 @@ public class ConfigReader {
         log.info("Wycztałem konfigurację z pliku: "+configPath);
         InputStream inputStream = new FileInputStream(configPath);
         p.load(inputStream);
+        Settings.CHROME_VERSION = p.getProperty("CHROME_VERSION");
         Settings.TESTED_APP_URL = p.getProperty("TESTED_APP_URL");
         Settings.RP_ENDPOINT = p.getProperty("RP_ENDPOINT");
         Settings.RP_LAUNCH = p.getProperty("RP_LAUNCH");

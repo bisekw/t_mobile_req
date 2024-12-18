@@ -9,8 +9,8 @@
 # WebTester
 1. REPORTPORTALL:
 	zainstaluj docker & docker-compose na windows
-		przejdź do katalogu
-		uruchom: docker-compose -p reportportal up -d --force-recreate
+		przejdź do katalogu projektu następnie do reportPortall-docker-compose
+		uruchom: docker-compose -f docker-compose.yml -p reportportal up -d --force-recreate --build
 		
 		końcowy status uruchomienia dockerów kilka minut w zależności od procesora i ramu:
    		[+] Running 14/14
@@ -36,20 +36,24 @@
            For admin access:
            superadmin
            erebus
-   2. Uruchomienie testów jako Cucum w inteliJ edycja konfiguracji
+   2. Uruchomienie testów jako Cucumber w inteliJ edycja konfiguracji
       		Glue: 
    				framework.steps steps
             VM opotions:
                      -DIS_REMOTE_RUN=true
                      -Denvironment=UAT
-                     -DAPI_USERNAME=user4
-                     -DAPI_PASSWORD=xxxx
             Program argument:
                      --plugin
                      pretty
 
 3. Uruchomienie testów z runer TestNG (raportowanie do ReportPortall)
    przechodzimy do folderu projektowego uruchamiamy komendę:
-    mvn clean test -D"Surefire.suiteXmlFiles=src/test/java/TestNg.xml" -DIS_REMOTE_RUN=true -Denvironment=UAT -DAPI_USERNAME=user4 -DAPI_PASSWORD=xxxx
+    mvn clean test -D"Surefire.suiteXmlFiles=src/test/java/TestNg.xml" -DIS_REMOTE_RUN=true -Denvironment=UAT
 
-	
+4. Jenkins dostępny pod adresem http://localhost:8082
+   Zaloguj się do Jenkins
+   Otwórz w przeglądarce adres Jenkinsa, np. http://localhost:8082 (lub inny, jeśli zmieniłeś port).
+   Zainstaluj wtyczkę "Pipeline" (jeśli nie jest domyślnie zainstalowana)
+   Przejdź do Manage Jenkins > Manage Plugins > Available.
+  Wyszukaj "Pipeline".
+  Wyszukaj "Git" i zainstaluj

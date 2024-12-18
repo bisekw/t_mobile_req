@@ -1,19 +1,11 @@
-## Execute 'docker-compose -f docker-compose.yml -p reportportal up -d --force-recreate' --build
-## to start all containers in daemon mode
-## Where:
-##      '-f docker-compose.yml' -- specifies this compose file
-##      '-p reportportal' -- specifies container's prefix (project name)
-##      '-d' -- enables daemon mode
-##      '--force-recreate' -- forces re-recreating of all containers
-
 version: '3.9'
 services:
 
   gateway:
     image: traefik:v2.0.7
     ports:
-      - "8080:8080" # HTTP exposed
-      - "8081:8081" # HTTP Administration exposed
+      - "8080:8080" # HTTP
+      - "8081:8081" # HTTP Administration
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
@@ -43,20 +35,10 @@ services:
       nofile:
         soft: 65536
         hard: 65536
-      # ports:
-      # - "9200:9200"
     healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-s",
-          "-f",
-          "http://elastic:elastic1q2w3e@localhost:9200/_cat/health"
-        ]
+      test: ["CMD", "curl", "-s", "-f", "http://elastic:elastic1q2w3e@localhost:9200/_cat/health"]
     restart: always
 
-  ## An analyzer instance for main functionality, don't forget to use the same storage settings (either MinIO, or filesystem) for analyzer_train
   analyzer:
     image: reportportal/service-auto-analyzer:5.7.4
     environment:
@@ -75,7 +57,6 @@ services:
         condition: service_healthy
     restart: always
 
-  ## An analyzer instance for training, don't forget to setup the same storage (either MinIO, or filesystem) as for main analyzer
   analyzer_train:
     image: reportportal/service-auto-analyzer:5.7.4
     environment:
@@ -96,7 +77,6 @@ services:
         condition: service_healthy
     restart: always
 
-  ## Metrics service for analyzing how analyzer is working and manage retrained models
   metrics-gatherer:
     image: reportportal/service-metrics-gatherer:5.7.3
     environment:
@@ -118,7 +98,6 @@ services:
       - elasticsearch
     restart: always
 
-  ## Initial reportportal db schema. Run once.
   db-scripts:
     image: reportportal/migrations:5.7.3
     depends_on:
@@ -140,20 +119,10 @@ services:
       POSTGRES_PASSWORD: rppass
       POSTGRES_DB: reportportal
     volumes:
-      ## For unix host
-      # - ./data/postgres:/var/lib/postgresql/data
-      ## For windows host
       - postgres:/var/lib/postgresql/data
-    ## If you need to access the DB locally. Could be a security risk to expose DB.
-    # ports:
-    #   - "5432:5432"
     command: -c checkpoint_completion_target=0.9 -c work_mem=96MB -c wal_writer_delay=20ms -c synchronous_commit=off -c wal_buffers=32MB -c min_wal_size=2GB -c max_wal_size=4GB
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
-        ]
+      test: ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
       interval: 10s
       timeout: 120s
       retries: 10
@@ -161,9 +130,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.7.16-management
-    # ports:
-    #   - "5672:5672"
-    #   - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
@@ -174,8 +140,6 @@ services:
 
   uat:
     image: reportportal/service-authorization:5.7.4
-    # ports:
-    #   - "9999:9999"
     environment:
       RP_DB_HOST: postgres
       RP_DB_USER: rpuser
@@ -185,7 +149,7 @@ services:
       RP_BINARYSTORE_MINIO_ENDPOINT: http://minio:9000
       RP_BINARYSTORE_MINIO_ACCESSKEY: minio
       RP_BINARYSTORE_MINIO_SECRETKEY: minio123
-      RP_SESSION_LIVE: 86400 #in seconds
+      RP_SESSION_LIVE: 86400
     labels:
       - "traefik.http.middlewares.uat-strip-prefix.stripprefix.prefixes=/uat"
       - "traefik.http.routers.uat.middlewares=uat-strip-prefix@docker"
@@ -242,7 +206,7 @@ services:
       LOGGING_LEVEL_ORG_HIBERNATE_SQL: info
       RP_REQUESTLOGGING: "false"
       MANAGEMENT_HEALTH_ELASTICSEARCH_ENABLED: "false"
-      JAVA_OPTS: -Xmx1g -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp  -Dcom.sun.management.jmxremote.rmi.port=12349 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false  -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=0.0.0.0
+      JAVA_OPTS: -Xmx1g -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp
     labels:
       - "traefik.http.middlewares.api-strip-prefix.stripprefix.prefixes=/api"
       - "traefik.http.routers.api.middlewares=api-strip-prefix@docker"
@@ -314,31 +278,33 @@ services:
 
   minio:
     image: minio/minio:RELEASE.2020-10-27T04-03-55Z
-    #ports:
-    #  - '9000:9000'
     volumes:
-      ## For unix host
-      # - ./data/storage:/data 
-      ## For windows host
       - minio:/data
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data
     healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-f",
-          "http://localhost:9000/minio/health/live"
-        ]
+      test: ["CMD","curl","-f","http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
     restart: always
 
-## Docker volume for Windows host
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
+    user: root
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    ports:
+      - "8082:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
 volumes:
   postgres:
   minio:
+  jenkins_home:
